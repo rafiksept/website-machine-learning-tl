@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+</head>
+<body>
+    <div class="flex w-full poppins-regular">
+        <div class="flex-[0.8] ">
+            <img src="{% static "img/login.png" %}" alt="malang" class="w-full max-h-screen">
+         
+        </div>
+        <div class="flex-1 flex flex-col  items-center justify-center px-10">
+          
+           <div class="px-16">
+                <h1 class="poppins-bold text-xl">Account Login</h1>
+                <p class="text-[#8692A6] mt-2 ">If you are already a member you can login with your username and password.</p>
+                
+                <form class="w-full flex flex-col" method="POST">
+                    {% csrf_token %}
+             
+                    <div class="mb-3 mt-6">
+                        <label for="username" class="block mb-2 text-sm font-medium text-[#696F79] dark:text-white">Username</label>
+                        <input name="username" id="email" class=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+                    </div> 
+                    <div class="mb-6">
+                        <label for="password" class="block mb-2 text-sm font-medium text-[#696F79] dark:text-white">Password</label>
+                        <input name="password" type="password" id="password" class=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+                    </div> 
+                    <div class="flex items-start mb-6">
+                        <div class="flex items-center h-5">
+                        <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" />
+                        </div>
+                        <label for="remember" class="ms-2 text-sm font-medium text-[#696F79] dark:text-gray-300">Remember Me</label>
+                    </div>
+                    <button type="submit" class="text-white bg-[#f9d3ab] focus:ring-4 focus:outline-none  font-medium rounded-lg text-md w-full sm:w-auto px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
+                </form>
+                <button class="mt-6 text-[#8692A6]">
+                    &#60; Back
+                </button>
+
+           </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block "isi" %}
+
+
+<div class="p-4 pt-20 sm:ml-72 mb-10">
+    <div>
+        <div class="flex justify-between items-center">
+            <h2 class="poppins-medium text-lg">Perhitungan</h2>
+            <div class="mt-2 relative">
+                <button id="dropdownDelayButton" data-dropdown-toggle="dropdownDelay" data-dropdown-delay="500" data-dropdown-trigger="hover" class="text-[#5A6ACF] bg-[#FBFCFE] hover:bg-[#5A6ACF] hover:text-[#FBFCFE] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">{{jam}}<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"> 
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                    
+                    <!-- Dropdown menu -->
+                <div id="dropdownDelay" class="z-10 right-[5px] hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 absolute">
+                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDelayButton">
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">07.00 - 08.00</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">12.00 - 13.00</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">18.00 - 19.00</a>
+                    </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="mt-2 relative">
+                
+            <div class="relative max-w-sm">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                    </svg>
+                </div>
+                <input id="datepicker" datepicker datepicker-autohide type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" value="{{tanggal}}">
+            </div>
+            
+        </div>
+
+        {% if error %}
+        <h3 class="mt-3 text-red-500">Tidak Ada Data</h3>
+        {% else %}
+        <div class="relative overflow-x-auto mt-5">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Nama
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Lampu Merah (Detik)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Lampu Kuning (Detik)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Lampu Hijau (Detik)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i,j,k in tabel_hasil  %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{i}}
+                        </th>
+                        <td class="px-6 py-4">
+                           {{j}}
+                        </td>
+                        <td class="px-6 py-4">
+                            5
+                        </td>
+                        <td class="px-6 py-4">
+                           {{k}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        
+    </div>
+
+    {% if error %}
+    <h3 class="mt-3 text-red-500">Perhitungan Tidak Tersedia</h3>
+    {% else %}
+    {% for jalan, item in semua_kendaraan   %}
+    <div class="mt-6">
+        <div class="flex justify-between items-center">
+            <h2 class="poppins-medium text-lg">{{jalan}}</h2>
+        </div>
+
+        <div class="relative overflow-x-auto mt-5">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Waktu
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Jumlah Mobil
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Smp Mobil
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Jumlah Motor
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Smp Motor
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Total Kendaraan
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Total Smp
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% comment %} {% zip jumlah_kendaraan_mobil jumlah_kendaraan_motor as mobil motor %} {% endcomment %}
+                    {% for i, j, k, l, m, n in item %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ i.jam }}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{ i.jumlah }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ k}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ j.jumlah }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ l}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{m}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{n}}
+                        </td>
+                    </tr>
+                {% endfor %}
+                
+                </tbody>
+            </table>
+        </div>    
+        </div>
+    {% endfor %}
+
+    <div class="mt-6 border-b border-gray-200 py-5">
+        <h2 class="poppins-medium text-lg">Detail Perhitungan</h2>
+
+        <div class="w-full mt-3 flex">
+            <div class="flex-1">
+                <p class="poppins-regular">1. Waktu Hilang (R) = {{waktu_hilang}} Detik</p>
+            </div>
+            <div class="flex-1">
+                <p class="poppins-regular">2. Arus Jenuh Untuk Setiap Persimpangan</p>
+                <ul>
+                    {% for i,j in arus_jenuh  %}
+                         <li>{{i}} = {{j}}</li>
+                    {% endfor %}
+                 
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-b border-gray-200 py-5">
+        <div class="w-full mt-3 flex">
+            <div class="flex-1">
+                <p class="poppins-regular">3. Menentukan Tingkat Arus Lalu Lintas (y)</p>
+                <ul>
+                    {% for i,j in tingkat_arus  %}
+                    <li>y{{i}} = {{j}}</li>
+                    {% endfor %}
+                    <li>Y = {{Y}}</li>
+                </ul>
+            </div>
+            <div class="flex-1">
+                <p class="poppins-regular">4.  Untuk waktu hilang total per siklus (𝐿) </p>
+                <ul>
+                    <li>L = {{L}}</li>
+                    <li>CO = {{CO}} Detik</li>
+                 
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="border-b border-gray-200 py-5">
+        <div class="w-full mt-3 flex">
+            <div class="flex-1">
+                <p class="poppins-regular">5. Waktu Hijau Maksimum  = {{ waktu_hijau_maksimum }} Detik</p>
+            </div>
+            <div class="flex-1">
+                <p class="poppins-regular">6. Waktu Hijau Efektif Setiap Fase</p>
+                <ul>
+                    {% for i,j in  hijau_list_maksimum  %}
+                    <li>{{i}} = {{j}} Detik</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="py-5">
+        <div class="w-full mt-3 flex">
+            <div class="flex-1">
+                <p class="poppins-regular">7. Untuk Waktu Merah Setiap Fase</p>
+                <ul>
+                    {% for i,j in  merah_list_maksimum  %}
+                    <li>{{i}} = {{j}} Detik</li>
+                    {% endfor %}
+                    
+                </ul>
+            </div>
+    
+        </div>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock "isi" %}
+
+{% block "script" %}
+
+
+<script>
+    var dropdownButton = document.getElementById('dropdownDelayButton');
+    var dropdownMenu = document.getElementById('dropdownDelay');
+    var delay = dropdownButton.getAttribute('data-dropdown-delay') || 0;
+
+    let hoverTimeout;
+
+    dropdownButton.addEventListener('mouseenter', function () {
+        hoverTimeout = setTimeout(function () {
+            dropdownMenu.classList.remove('hidden');
+            dropdownMenu.classList.add('block');
+        }, delay);
+    });
+
+    dropdownButton.addEventListener('mouseleave', function () {
+        clearTimeout(hoverTimeout);
+        dropdownMenu.classList.remove('block');
+        dropdownMenu.classList.add('hidden');
+    });
+
+    dropdownMenu.addEventListener('mouseenter', function () {
+        clearTimeout(hoverTimeout);
+        dropdownMenu.classList.remove('hidden');
+        dropdownMenu.classList.add('block');
+    });
+
+    dropdownMenu.addEventListener('mouseleave', function () {
+        dropdownMenu.classList.remove('block');
+        dropdownMenu.classList.add('hidden');
+    });
+  
+
+    const dropdownItems = document.querySelectorAll('#dropdownDelay a');
+    
+    // Add click event listener to each item
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default anchor behavior
+            const selectedValue = this.textContent;
+            // Dapatkan URL saat ini
+            var currentUrl = new URL(window.location.href);
+            // Tambahkan parameter query
+            currentUrl.searchParams.set('jam', selectedValue);
+            window.location.href = currentUrl.toString();
+
+            
+            
+            // You can also update the button text with the selected value
+            document.getElementById('dropdownDelayButton').innerHTML = `${selectedValue} <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>`;
+        });
+    });
+
+    const datepicker = document.getElementById('datepicker');
+    var today = new Date().toISOString().split('T')[0];
+
+    $("#datepicker").datepicker({
+        maxDate: 0,
+        onSelect: function(dateText) {
+            
+            // Ketika tanggal dipilih, cek apakah nilainya berubah menjadi tanggal saat ini
+            var selectedDate = new Date(dateText);
+
+            var year = selectedDate.getFullYear();
+            var month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Menggunakan String() dan padStart() untuk menambahkan nol di depan jika perlu
+            var day = String(selectedDate.getDate()).padStart(2, '0');
+
+// Format tanggal baru sesuai dengan "YYYY-MM-DD"
+            var formattedDate = `${year}-${month}-${day}`;
+            
+           
+            var currentUrl = new URL(window.location.href);
+            // Tambahkan parameter query
+            currentUrl.searchParams.set('tanggal', formattedDate);
+            window.location.href = currentUrl.toString();
+        }
+    });
+</script>
+
+
+{% endblock "script" %}
+
+
+
+
+
+
+
+

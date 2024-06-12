@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block "isi" %}
+<div class="p-4 pt-20 sm:ml-64">
+    {% comment %} <h1>Dashboard</h1> {% endcomment %}
+    <div class="flex border-b border-b-gray-200">
+        <div class="flex-[1.5] p-4 md:p-6 border-r-gray-200 border-r">
+            <h2 class="poppins-medium">Jumlah Kendaraan</h2>
+            <p class="poppins-medium py-2 text-2xl">{{jumlahKendaraan}}</p>
+            <div class="flex poppins-regular items-center">
+                {% if perubahan > 0  %}
+                <span class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
+                    &#8593; {{perubahan}}
+                </span>
+                <p class="ml-2 text-sm text-gray-500">vs {{kemarin}}</p>
+                {% else %}
+                <span class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
+                    &#8595; {{perubahan}}
+                </span>
+                <p class="ml-2 text-sm text-gray-500">vs {{kemarin}}</p>
+                {% endif %}
+            </div>
+            <p class="mt-2 text-sm text-gray-500">Kendaraan dari  {{rentang_waktu}}</p>
+            <div id="column-chart"></div>
+        </div>
+        <div class="flex-1 justify-center items-center flex flex-col">
+            <h2 class="poppins-medium">Jumlah Kendaraan per Waktu</h2>
+            <p class="mt-2 text-sm text-gray-500">Dari  {{rentang_waktu}}</p>
+            <div class="py-6" id="donut-chart"></div>
+        </div>
+    </div>
+    <div class="px-4 py-7">
+        <h2 class="poppins-medium">Jumlah Kendaraan</h2>
+            <p class="poppins-medium py-2 text-2xl">{{jumlahKendaraan}}</p>
+            <div class="flex poppins-regular items-center">
+                {% if perubahan > 0  %}
+                <span class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
+                    &#8593; {{perubahan}}
+                </span>
+                <p class="ml-2 text-sm text-gray-500">vs {{kemarin}}</p>
+                {% else %}
+                <span class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
+                    &#8595; {{perubahan}}
+                </span>
+                <p class="ml-2 text-sm text-gray-500">vs {{kemarin}}</p>
+                {% endif %}
+            </div>
+        <div id="line-chart" class="pt-7"></div>
+    </div>
+    <div>
+        <div class="p-4 pt-10 flex">
+            <div class="flex-1 relative overflow-x-auto">
+                <h2 class="poppins-medium text-lg">Tempat Terpadat</h2>
+                <p class="mt-1 text-xs text-gray-500 mb-4">Jumlah Kendaraan dari terpadat 7 hari terakhir di Kota Malang</p>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <tbody>
+                        {% for entry in data_tempat %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row" class="pr-6 py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{entry.jalan}}
+                            </th>
+                            <td class="px-6 py-4">
+                                {{entry.total_kendaraan}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex-1 relative overflow-x-auto ml-5">
+                <h2 class="poppins-medium text-lg">Waktu Terpadat</h2>
+                <p class="mt-1 text-xs text-gray-500 mb-4">Jumlah Kendaraan dari terpadat di Kota Malang</p>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <tbody>
+                        {% for entry in data_waktu %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row" class="pr-6 py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{entry.jam}}
+                            </th>
+                            <td class="px-6 py-4">
+                                {{entry.total_kendaraan}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock "isi" %}
+
+{% block "script" %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+                var motor = JSON.parse('{{ motor_bar_chart|escapejs }}');
+                var mobil = JSON.parse('{{ mobil_bar_chart|escapejs }}');
+              
+                const options = {
+                    colors: ["#5A6ACF", "#E6E8EC"],
+                    series: [
+                    {
+                        name: "Motor",
+                        color: "#5A6ACF",
+                        data: motor,
+                    },
+                    {
+                        name: "Mobil",
+                        color: "#E6E8EC",
+                        data:mobil,
+                    },
+                    ],
+                    chart: {
+                    type: "bar",
+                    height: "320px",
+                    fontFamily: "Inter, sans-serif",
+                    toolbar: {
+                        show: false,
+                    },
+                    },
+                    plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: "90%",
+                        borderRadiusApplication: "end",
+                        borderRadius: 2,
+                        
+                    },
+                    },
+                    tooltip: {
+                    shared: true,
+                    intersect: false,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                    },
+                    },
+                    states: {
+                    hover: {
+                        filter: {
+                        type: "darken",
+                        value: 1,
+                        },
+                    },
+                    },
+                    stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ["transparent"],
+                    },
+                    grid: {
+                    show: false,
+                    strokeDashArray: 4,
+                    padding: {
+                        left: 2,
+                        right: 2,
+                        top: -14
+                    },
+                    },
+                    dataLabels: {
+                    enabled: false,
+                    },
+                    legend: {
+                    show: true,
+                    },
+                    xaxis: {
+                    floating: false,
+                    labels: {
+                        show: true,
+                        style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                        }
+                    },
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    },
+                    yaxis: {
+                    show: false,
+                    },
+                    fill: {
+                    opacity: 1,
+                    },
+                }
+                
+                if(document.getElementById("column-chart") && typeof ApexCharts !== 'undefined') {
+                    const chart = new ApexCharts(document.getElementById("column-chart"), options);
+                    chart.render();
+                }
+                
+
+        var pagi = JSON.parse('{{ pagi_data|escapejs }}');
+        var siang = JSON.parse('{{ siang_data|escapejs }}');
+        var malam = JSON.parse('{{ malam_data|escapejs }}');
+        var total_donut = JSON.parse('{{ total_donut|escapejs }}');
+        {% comment %} var malam = JSON.parse('{{ malam_data|escapejs }}'); {% endcomment %}
+        
+        {% comment %} console.log(siang) {% endcomment %}
+        const getChartOptions = () => {
+            return {
+            series: [pagi, siang, malam],
+            colors: ["#C7CEFF", "#8593ED", "#5A6ACF"],
+            chart: {
+                height: 320,
+                width: "100%",
+                type: "donut",
+            },
+            stroke: {
+                colors: ["transparent"],
+                lineCap: "",
+            },
+            plotOptions: {
+                pie: {
+                donut: {
+                    labels: {
+                    show: true,
+                    name: {
+                        show: true,
+                        fontFamily: "Poppins, sans-serif",
+                        offsetY: 20,
+                    },
+                    total: {
+                        showAlways: false,
+                        show: true,
+                        label: "Jumlah Kendaraan",
+                        fontFamily: "Poppins, sans-serif",
+                        formatter: function (w) {
+                        const sum = w.globals.seriesTotals.reduce((a, b) => {
+                            return a + b
+                        }, 0)
+                        return total_donut
+                        },
+                    },
+                    value: {
+                        show: true,
+                        fontFamily: "Poppins, sans-serif",
+                        offsetY: -20,
+                        formatter: function (value) {
+                        return value 
+                        },
+                    },
+                    },
+                    size: "80%",
+                },
+                },
+            },
+            grid: {
+                padding: {
+                top: -2,
+                },
+            },
+            labels: ["Pagi", "Siang", "Malam"],
+            dataLabels: {
+                enabled: false,
+            },
+            legend: {
+                position: "bottom",
+                fontFamily: "Poppins, sans-serif",
+            },
+            yaxis: {
+                labels: {
+                formatter: function (value) {
+                    return value 
+                },
+                },
+            },
+            xaxis: {
+                labels: {
+                formatter: function (value) {
+                    return value  
+                },
+                },
+                axisTicks: {
+                show: false,
+                },
+                axisBorder: {
+                show: false,
+                },
+            },
+            }
+        }
+        
+        if (document.getElementById("donut-chart") && typeof ApexCharts !== 'undefined') {
+            const chart = new ApexCharts(document.getElementById("donut-chart"), getChartOptions());
+            chart.render();
+           
+        }
+
+        var motorline = JSON.parse('{{ motor_line_chart|escapejs }}');
+        var mobilline = JSON.parse('{{ mobil_line_chart|escapejs }}');
+        var dateline = JSON.parse('{{ date_line_chart|escapejs }}');
+
+        
+        const lineOptions = {
+            chart: {
+            height: "150%",
+            maxWidth: "100%",
+            type: "line",
+            fontFamily: "Inter, sans-serif",
+            dropShadow: {
+                enabled: false,
+            },
+            toolbar: {
+                show: false,
+            },
+            },
+            tooltip: {
+            enabled: true,
+            x: {
+                show: false,
+            },
+            },
+            dataLabels: {
+            enabled: false,
+            },
+            stroke: {
+            width: 6,
+            },
+            grid: {
+            show: true,
+            strokeDashArray: 4,
+            padding: {
+                left: 2,
+                right: 2,
+                top: -26
+            },
+            },
+            series: [
+            {
+                name: "Mobil",
+                data: mobilline,
+                color: "#E6E8EC",
+            },
+            {
+                name: "Motor",
+                data: motorline,
+                color: "#5A6ACF",
+            },
+            ],
+            legend: {
+            show: true,
+            itemMargin: {
+                horizontal: 10,
+                vertical: 5
+            },
+            fontSize : "12px"
+            },
+            stroke: {
+            curve: 'smooth'
+            },
+            xaxis: {
+            categories:dateline,
+            labels: {
+                show: true,
+                style: {
+                fontFamily: "Inter, sans-serif",
+                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                }
+            },
+            axisBorder: {
+                show: false,
+            },
+            axisTicks: {
+                show: false,
+            },
+            },
+            yaxis: {
+            show: false,
+            },
+        }
+        
+        if (document.getElementById("line-chart") && typeof ApexCharts !== 'undefined') {
+            const lineChart = new ApexCharts(document.getElementById("line-chart"), lineOptions);
+            lineChart.render();
+        }
+  
+  
+        </script>
+{% endblock "script" %}
+
+
+
